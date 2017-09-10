@@ -25,168 +25,130 @@ blockImage.src = "images/block.png";
 var debugSpawner;
 
 var updateLayoutWidth = function() {
-	$(".chartMask").css("visibility", "visible");
+    $(".chartMask").css("visibility", "visible");
 };
 
 var updateLayoutHeight = function() {
-	var newHeight = window.innerHeight;
-	if ($("#header").css("display") != "none") newHeight -= $("#header").outerHeight();
-	$("#pageSplitter").height(newHeight);
+    var newHeight = window.innerHeight;
+    if ($("#header").css("display") != "none") newHeight -= $("#header").outerHeight();
+    $("#pageSplitter").height(newHeight);
 };
 
 $(document).ready(function() {
 
-	prevChartWidth = $("#pageSplitter").width() / 2;
-	
-	$("#chartCell").hide();
-	
-	DONATION_ADDRESS = $("#donationAddress").html();
-	// Because the user has javascript running:
-	$("#noJavascript").css("display", "none");
+    prevChartWidth = $("#pageSplitter").width() / 2;
 
-	// Initialize draggable vertical page splitter
-	updateLayoutHeight();
-	
-	StatusBox.init(DEBUG_MODE);
+    $("#chartCell").hide();
 
-	$(".clickSuppress").click(function() {
-		$(".clickSuppress").parent().slideUp(300);
-	});
+    DONATION_ADDRESS = $("#donationAddress").html();
+    // Because the user has javascript running:
+    $("#noJavascript").css("display", "none");
 
-	// Create a bubble spawner for testing
-	debugSpawner = function() {
-		// Generate some test bubbles
-		if (Math.random() <= 0.1) {
-			// Try to simulate the transaction spread
-			var volume;
-			var order = Math.random();
-			if (order < 0.6) {
-				volume = Math.random();
-			} else if (order < 0.8) {
-				volume = Math.random() * 10;
-			} else if (order < 0.95) {
-				volume = Math.random() * 100;
-			} else {
-				volume = Math.random() * 1000;
-			}
+    // Initialize draggable vertical page splitter
+    updateLayoutHeight();
 
-			var randType = Math.random();
-			if (randType < 0.5)
-				new Transaction(volume, Math.random() < 0.1);
-			else if (randType < 0.8)
-				new Transaction(volume, false, null, null, true);
-			else
-				new Transaction(volume, false, volume * 75, 'USD');
-		}
-	};
-	// Spam the following line into console, it's kind of fun.
-	// new Block(228158, 270, 100 * satoshi, 153 * 1024);
-	
-	// look for url params
-	urlParam = function(name){
-		var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-		if (results===null){
-			return null;
-		}
-		else{
-			return results[1] || 0;
-		}
-	};
+    StatusBox.init(DEBUG_MODE);
 
-	if(urlParam('hide') == 1) {
-		toggleInterface();
-	}
+    $(".clickSuppress").click(function() {
+        $(".clickSuppress").parent().slideUp(300);
+    });
 
-	switchExchange("poloniex");
-	
-	// Attach mouseover qr
-	$("#donationAddress").qr();
-	$("#donationAddressBitListen").qr();
-	$("#musicianDonation").qr();
-	
+    // Create a bubble spawner for testing
+    debugSpawner = function() {
+        // Generate some test bubbles
+        if (Math.random() <= 0.1) {
+            // Try to simulate the transaction spread
+            var volume;
+            var order = Math.random();
+            if (order < 0.6) {
+                volume = Math.random();
+            } else if (order < 0.8) {
+                volume = Math.random() * 10;
+            } else if (order < 0.95) {
+                volume = Math.random() * 100;
+            } else {
+                volume = Math.random() * 1000;
+            }
+
+            var randType = Math.random();
+            if (randType < 0.5)
+                new Transaction(volume, Math.random() < 0.1);
+            else if (randType < 0.8)
+                new Transaction(volume, false, null, null, true);
+            else
+                new Transaction(volume, false, volume * 75, 'USD');
+        }
+    };
+    // Spam the following line into console, it's kind of fun.
+    // new Block(228158, 270, 100 * satoshi, 153 * 1024);
+
+    // look for url params
+    urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results===null){
+            return null;
+        }
+        else{
+            return results[1] || 0;
+        }
+    };
+
+    if(urlParam('hide') == 1) {
+        toggleInterface();
+    }
+
+    switchExchange("poloniex");
+
+    // Attach mouseover qr
+    $("#donationAddress").qr();
+    $("#donationAddressBitListen").qr();
+    $("#musicianDonation").qr();
+
 });
 
 // Function for handling interface show/hide
 var toggleInterface = function() {
-	if ($(".interface:hidden").length === 0) {
-		$(".interface").fadeOut(500, updateLayoutHeight);
-		$("#hideInterface").html("[ Show Interface ]");
-		$("#hideInterface").css("opacity", "0.5");
-	} else {
-		$(".interface").fadeIn(500);
-		$("#hideInterface").html("[ Hide Interface ]");
-		$("#hideInterface").css("opacity", "1");
-		updateLayoutHeight();
-	}
+    if ($(".interface:hidden").length === 0) {
+        $(".interface").fadeOut(500, updateLayoutHeight);
+        $("#hideInterface").html("[ Show Interface ]");
+        $("#hideInterface").css("opacity", "0.5");
+    } else {
+        $(".interface").fadeIn(500);
+        $("#hideInterface").html("[ Hide Interface ]");
+        $("#hideInterface").css("opacity", "1");
+        updateLayoutHeight();
+    }
 };
 
 var globalUpdate = function(time) {
-	window.requestAnimationFrame(globalUpdate);
-	var delta = time - last_update;
-	last_update = time;
-	for (var i = 0; i < updateTargets.length; i++) {
-		updateTargets[i].update(delta);
-	}
+    window.requestAnimationFrame(globalUpdate);
+    var delta = time - last_update;
+    last_update = time;
+    for (var i = 0; i < updateTargets.length; i++) {
+        updateTargets[i].update(delta);
+    }
 };
 
 $(window).bind("load", function() {
-	if (DEBUG_MODE) {
-		setInterval(debugSpawner, 100);
-	} else {
-		if ($("#blockchainCheckBox").prop("checked"))
-			TransactionSocket.init();
-		if ($("#mtgoxCheckBox").prop("checked"))
-			TradeSocket.init();
-	}
+    if (DEBUG_MODE) {
+        setInterval(debugSpawner, 100);
+    } else {
+        if ($("#blockchainCheckBox").prop("checked"))
+            TransactionSocket.init();
+    }
 
-	window.requestAnimationFrame(globalUpdate);
-	
-	Sound.loadup();
-	Sound.init();
+    window.requestAnimationFrame(globalUpdate);
+
+    Sound.loadup();
+    Sound.init();
 });
-
-var endResize = function() {
-    $(".chartMask").css("visibility", "hidden");
-	for (var i = 0; i < updateTargets.length; i++) {
-		updateTargets[i].updateContainerSize();
-	}
-};
-
-var hideChart = function() {
-	$("#chartElement").hide();
-	$("#showChart").show();
-	prevChartWidth = $("#chartCell").width();
-	$("#chartCell").width(0);
-	$("#chartCell").hide();
-	$("#pageSplitter").colResizable({
-		disable: true
-	});
-};
-
-var showChart = function() {
-	$("#chartElement").show();
-	$("#showChart").hide();
-	$("#chartCell").width(prevChartWidth);
-	$("#chartCell").show();
-	$(window).trigger("resize");
-	if ($("#bitcoinChart").length === 0) {
-		// Load the iframe
-		$("#chartHolder").html('<iframe id="bitcoinChart" scrolling="no" frameBorder="0" src="http://bitcoin.clarkmoody.com/widget/chart/zeroblock/"></iframe>');
-	}
-	$("#pageSplitter").colResizable({
-		liveDrag: true,
-		onDrag: updateLayoutWidth,
-		onResize: endResize
-	});
-};
 
 $(window).resize(function() {
     updateLayoutHeight();
 });
 
 window.onbeforeunload = function(e) {
-	clearInterval(globalUpdate);
-	TransactionSocket.close();
-	TradeSocket.close();
+    clearInterval(globalUpdate);
+    TransactionSocket.close();
 };
 

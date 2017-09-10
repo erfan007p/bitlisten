@@ -10,49 +10,35 @@ function StatusBox() {
 }
 
 StatusBox.init = function(debugmode) {
-	StatusBox.blockchain = $("#blockchainStatus");
-	StatusBox.mtgox = $("#mtgoxStatus");
+    StatusBox.blockchain = $("#blockchainStatus");
 
-	if (debugmode) {
-		StatusBox.blockchain.html("");
-		StatusBox.mtgox.html("Debug mode.");
-	}
+    if (debugmode) {
+        StatusBox.blockchain.html("");
+        StatusBox.mtgox.html("Debug mode.");
+    }
 
-	if ($("#blockchainCheckBox").is(":checked"))
-		StatusBox.reconnecting("blockchain");
-	else
-		StatusBox.closed("blockchain");
-
-	if ($("#mtgoxCheckBox").is(":checked"))
-		StatusBox.reconnecting("mtgox");
-	else
-		StatusBox.closed("mtgox");
+    if ($("#blockchainCheckBox").is(":checked"))
+        StatusBox.reconnecting("blockchain");
+    else
+        StatusBox.closed("blockchain");
 };
-// "type" can be either "blockchain" or "mtgox"
+// "type" can be "blockchain"
 StatusBox.connected = function(type) {
-	if (type == "blockchain")
-		StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: green;">' + CONNECTED + '</span>');
-	if (type == "mtgox")
-		StatusBox.mtgox.html('Mt.Gox Trades: <span style="color: green;">' + CONNECTED + '</span>');
+    if (type == "blockchain")
+        StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: green;">' + CONNECTED + '</span>');
 };
 
 StatusBox.reconnecting = function(type) {
-	if (type == "blockchain")
-		StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: yellow;">' + CONNECTING + '</span>');
-	if (type == "mtgox")
-		StatusBox.mtgox.html('Mt.Gox Trades: <span style="color: yellow;">' + CONNECTING + '</span>');
+    if (type == "blockchain")
+        StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: yellow;">' + CONNECTING + '</span>');
 };
 
 StatusBox.nosupport = function(type) {
-	if (type == "blockchain")
-		StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: red;">' + NO_SUPPORT + '</span>');
-	if (type == "mtgox")
-		StatusBox.mtgox.html('Mt.Gox Trades: <span style="color: red;">' + NO_SUPPORT + '</span>');
+    if (type == "blockchain")
+        StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: red;">' + NO_SUPPORT + '</span>');
 };
 
 StatusBox.closed = function(type) {
-	if (type == "blockchain")
-		StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: gray;">' + CLOSED + '</span>');
-	if (type == "mtgox")
-		StatusBox.mtgox.html('Mt.Gox Trades: <span style="color: gray;">' + CLOSED + '</span>');
+    if (type == "blockchain")
+        StatusBox.blockchain.html('Transactions (' + provider_name + '): <span style="color: gray;">' + CLOSED + '</span>');
 };
