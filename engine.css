@@ -219,6 +219,10 @@ a {
 	color: white;
 }
 
+#soundControls p {
+    margin: 0.5em 0;
+}
+
 #hideInterface {
 	position: absolute;
 	right: 0;
@@ -337,5 +341,25 @@ a.boxclose{
 
 .monospace {
 	font-family: "Courier New", Courier, monospace;
+}
+
+#waitingForTransactions {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 2em;
+    transition: opacity 1s;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    -o-user-select: none;
+    user-select: none;
+}
+
+.disabled {
+    color: #666666;
 }
 
