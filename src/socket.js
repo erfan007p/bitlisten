@@ -2,7 +2,7 @@ var satoshi = 100000000;
 var DELAY_CAP = 20000;
 var lastBlockHeight = 0;
 
-var provider_name = "insight.dash.org";
+var provider_name = "trezarcoin.network";
 
 var transactionSocketDelay = 1000;
 
@@ -75,7 +75,7 @@ TransactionSocket.init = function() {
 
     connection.on("block", function(blockHash){
         // console.log(provider_name + ': blockHash: ' + blockHash);
-        $.getJSON('https://' + provider_name + '/api/block/' + blockHash, function(blockData) {
+        $.getJSON('https://' + provider_name + '/api/getblock?hash' + blockHash, function(blockData) {
             // console.log(provider_name + ': blockData: ' + JSON.stringify(blockData));
             var blockHeight = blockData.height;
             var transactions = blockData.tx.length;
